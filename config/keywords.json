@@ -1,0 +1,10 @@
+{
+  "auth": ["login", "logout", "register", "sign in", "sign up", "password", "refresh token", "authentication", "session"],
+  "users": ["profile", "avatar", "account", "update profile", "upload avatar", "user settings"],
+  "departments": ["department", "departments", "ward", "unit", "manage departments"],
+  "doctors": ["doctor", "doctors", "physician", "schedule", "available slots", "availability", "manage doctors"],
+  "patients": ["patient", "patients", "patient profile", "patient list"],
+  "appointments": ["appointment", "appointments", "book", "booking", "schedule appointment", "appointment status", "cancel appointment"],
+  "records": ["medical record", "medical records", "record", "diagnosis", "treatment", "clinical notes"],
+  "attachments": ["attachment", "attachments", "upload file", "download file", "file upload", "document"]
+}
