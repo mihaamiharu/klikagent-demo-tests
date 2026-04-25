@@ -95,13 +95,32 @@ Never use CSS selectors (`.class`, `#id`) or XPath in specs.
 
 ---
 
+## Credentials
+
+Never hardcode email addresses or passwords in specs. Import from `config/personas.ts`:
+
+```typescript
+import { personas } from '../../../config/personas';
+
+// then use:
+await authPage.login(personas.patient.email, personas.patient.password);
+await authPage.login(personas.doctor.email, personas.doctor.password);
+await authPage.login(personas.admin.email, personas.admin.password);
+```
+
+Available personas: `admin`, `doctor`, `patient` — each has `email`, `password`, `displayName`, and `role`.
+
+---
+
 ## Auth Setup
 
 For tests that start logged in, use the `authPage` fixture to log in during setup. Don't repeat login steps inline — extract to POM methods.
 
 ```typescript
+import { personas } from '../../../config/personas';
+
 test.beforeEach(async ({ authPage }) => {
-  await authPage.login('john.doe@caresync.dev', 'Password123!');
+  await authPage.login(personas.patient.email, personas.patient.password);
 });
 ```
 
@@ -115,3 +134,4 @@ test.beforeEach(async ({ authPage }) => {
 - ❌ Chaining `expect(...).or()` — this method does not exist. Use `locator.or()` or regex in `toContainText`
 - ❌ Importing a POM that doesn't exist yet — the TypeScript compiler will catch this, but don't guess
 - ❌ Using `new PageClass(page)` when the fixture is registered — always use fixture parameters
+- ❌ Hardcoding credentials like `'jane.doe@caresync.dev'` — use `personas.patient.email` from `config/personas.ts`
