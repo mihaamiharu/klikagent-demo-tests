@@ -51,7 +51,7 @@ Typical test journeys:
 
 ## Patient
 
-**Credentials:** john.doe@caresync.dev / Password123!
+**Credentials:** jane.doe@caresync.dev / Password123!
 
 Can do:
 - View and update own profile (including avatar)
