@@ -2,81 +2,57 @@ import { Page, Locator, expect } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
-
-  // Login form elements
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
-  readonly signInButton: Locator;
-  readonly signUpLink: Locator;
-
-  // Error messages
+  readonly submitButton: Locator;
   readonly errorAlert: Locator;
-  readonly emailError: Locator;
-  readonly passwordError: Locator;
-
-  // Dashboard elements
-  readonly welcomeHeading: Locator;
-  readonly userNameInSidebar: Locator;
-  readonly userRoleInSidebar: Locator;
-  readonly logoutButton: Locator;
+  readonly signUpLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
-
-    // Login form
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.signInButton = page.getByRole('button', { name: 'Sign in' });
-    this.signUpLink = page.getByRole('link', { name: 'Sign up' });
-
-    // Error messages
+    this.emailInput = page.getByTestId('email-input');
+    this.passwordInput = page.getByTestId('password-input');
+    this.submitButton = page.getByTestId('login-submit');
     this.errorAlert = page.getByRole('alert');
-    this.emailError = page.locator('p', { hasText: 'Invalid email address' });
-    this.passwordError = page.locator('p', { hasText: 'Password must be at least 6 characters' });
-
-    // Dashboard
-    this.welcomeHeading = page.getByRole('heading', { name: /^Welcome/ });
-    this.userNameInSidebar = page.locator('aside').getByText(/^[A-Z][a-z]+ [A-Z][a-z]+$/);
-    this.userRoleInSidebar = page.locator('aside').getByText(/^(patient|doctor|admin)$/);
-    this.logoutButton = page.getByRole('button', { name: 'Log out' });
+    this.signUpLink = page.getByRole('link', { name: 'Sign up' });
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    await this.signInButton.click();
+    await this.submitButton.click();
+    await this.page.waitForURL(/dashboard|admin/);
   }
 
-  async expectOnLoginPage() {
-    await expect(this.page).toHaveURL(/\/login$/);
+  async expectLoginSuccess(): Promise<void> {
+    await expect(this.page).toHaveURL(/dashboard|admin/);
   }
 
-  async expectErrorMessage(message: string) {
+  async expectLoginPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/login/);
+    await expect(this.page.getByRole('heading', { name: 'CareSync' })).toBeVisible();
+  }
+
+  async expectErrorMessage(message: string): Promise<void> {
     await expect(this.errorAlert).toContainText(message);
   }
 
-  async expectEmailValidationError() {
-    await expect(this.emailError).toBeVisible();
+  async logout(): Promise<void> {
+    const logoutButton = this.page.getByRole('complementary').getByRole('button', { name: 'Log out' });
+    await logoutButton.click();
+    await this.page.waitForURL(/login/);
   }
 
-  async expectPasswordValidationError() {
-    await expect(this.passwordError).toBeVisible();
+  async expectOnLoginPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/login/);
   }
 
-  async expectLoginSuccess() {
-    await expect(this.page).not.toHaveURL(/\/login$/);
+  async fillLoginForm(email: string, password: string): Promise<void> {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
   }
 
-  async expectWelcomeMessageWithFirstName(firstName: string) {
-    await expect(this.welcomeHeading).toContainText(new RegExp(`Welcome back, ${firstName}!`, 'i'));
-  }
-
-  async expectSidebarShowsUserInfo(name: string, role: string) {
-    await expect(this.userNameInSidebar).toContainText(name);
-    await expect(this.userRoleInSidebar).toContainText(role);
-  }
-
-  async logout() {
-    await this.logoutButton.click();
+  async submitLogin(): Promise<void> {
+    await this.submitButton.click();
   }
 }
