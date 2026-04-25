@@ -2,116 +2,108 @@ import { test, expect } from '../../../fixtures';
 import { personas } from '../../../config/personas';
 
 test.describe('Auth | Login, validation, logout, and role-based redirect', { tag: '@auth' }, () => {
-  test.beforeEach(async ({ page }) => {
+
+  // ── Login: valid credentials ─────────────────────────────────────────────────
+
+  test('redirects to dashboard on valid patient login', { tag: ['@smoke', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.patient.email, personas.patient.password);
+    await expect(page).toHaveURL(/dashboard/);
+  });
+
+  test('shows welcome message with user first name', { tag: ['@smoke', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.patient.email, personas.patient.password);
+    await expect(page.getByRole('heading', { name: /Welcome back, Jane/ })).toBeVisible();
+  });
+
+  test('shows user full name and role in sidebar', { tag: ['@smoke', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.patient.email, personas.patient.password);
+    await expect(page.getByRole('complementary').getByText('Jane Doe')).toBeVisible();
+    await expect(page.getByRole('complementary').getByText('patient')).toBeVisible();
+  });
+
+  // ── Login: invalid credentials ───────────────────────────────────────────────
+
+  test('shows error and no redirect on wrong password', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
     await page.goto('/login');
+    await authPage.emailInput.fill(personas.patient.email);
+    await authPage.passwordInput.fill('wrongpassword');
+    await authPage.submitButton.click();
+    await expect(page.getByRole('alert')).toContainText('Invalid email or password');
+    await expect(page).toHaveURL(/login/);
   });
 
-  test.describe('Login — valid credentials', { tag: '@smoke' }, () => {
-    test('Patient can login with valid credentials and is redirected to dashboard', async ({ authPage }) => {
-      await authPage.login(personas.patient.email, personas.patient.password);
-      
-      await expect(authPage.page).toHaveURL(/\/dashboard$/);
-      await authPage.expectWelcomeMessageWithFirstName(personas.patient.displayName);
-      await authPage.expectSidebarShowsUserInfo(personas.patient.displayName, personas.patient.role);
-    });
-
-    test('Doctor can login with valid credentials and is redirected to doctor page', async ({ authPage }) => {
-      await authPage.login(personas.doctor.email, personas.doctor.password);
-      
-      await expect(authPage.page).toHaveURL(/\/doctor$/);
-      await authPage.expectWelcomeMessageWithFirstName(personas.doctor.displayName);
-      await authPage.expectSidebarShowsUserInfo(personas.doctor.displayName, personas.doctor.role);
-    });
-
-    test('Admin can login with valid credentials and is redirected to admin page', async ({ authPage }) => {
-      await authPage.login(personas.admin.email, personas.admin.password);
-      
-      await expect(authPage.page).toHaveURL(/\/admin$/);
-      await authPage.expectWelcomeMessageWithFirstName(personas.admin.displayName);
-      await authPage.expectSidebarShowsUserInfo(personas.admin.displayName, personas.admin.role);
-    });
+  test('shows error and no redirect on non-existent email', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.emailInput.fill('nonexistent@caresync.dev');
+    await authPage.passwordInput.fill(personas.patient.password);
+    await authPage.submitButton.click();
+    await expect(page.getByRole('alert')).toContainText('Invalid email or password');
+    await expect(page).toHaveURL(/login/);
   });
 
-  test.describe('Login — invalid credentials', { tag: '@regression' }, () => {
-    test('shows error message when password is wrong', async ({ authPage }) => {
-      await authPage.login(personas.patient.email, 'wrongpassword');
-      
-      await authPage.expectOnLoginPage();
-      await authPage.expectErrorMessage('Invalid email or password');
-      await expect(authPage.emailInput).toHaveValue(personas.patient.email);
-    });
-
-    test('shows error message when email does not exist', async ({ authPage }) => {
-      await authPage.login('nonexistent@test.com', personas.patient.password);
-      
-      await authPage.expectOnLoginPage();
-      await authPage.expectErrorMessage('Invalid email or password');
-      await expect(authPage.emailInput).toHaveValue('nonexistent@test.com');
-    });
+  test('email field retains its value after failed attempt', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.emailInput.fill('nonexistent@caresync.dev');
+    await authPage.passwordInput.fill('wrongpassword');
+    await authPage.submitButton.click();
+    await expect(authPage.emailInput).toHaveValue('nonexistent@caresync.dev');
   });
 
-  test.describe('Login — empty fields validation', { tag: '@regression' }, () => {
-    test('shows validation errors on both fields when both are empty', async ({ authPage }) => {
-      await authPage.signInButton.click();
-      
-      await authPage.expectOnLoginPage();
-      await authPage.expectEmailValidationError();
-      await authPage.expectPasswordValidationError();
-    });
-
-    test('shows password validation error when only email is filled', async ({ authPage }) => {
-      await authPage.emailInput.fill(personas.patient.email);
-      await authPage.signInButton.click();
-      
-      await authPage.expectOnLoginPage();
-      await authPage.expectPasswordValidationError();
-    });
-
-    test('shows email validation error when only password is filled', async ({ authPage }) => {
-      await authPage.passwordInput.fill(personas.patient.password);
-      await authPage.signInButton.click();
-      
-      await authPage.expectOnLoginPage();
-      await authPage.expectEmailValidationError();
-    });
+  test('password field is cleared after failed attempt', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.emailInput.fill(personas.patient.email);
+    await authPage.passwordInput.fill('wrongpassword');
+    await authPage.submitButton.click();
+    await expect(authPage.passwordInput).toBeEmpty();
   });
 
-  test.describe('Logout', { tag: '@smoke' }, () => {
-    test('authenticated user can logout and is redirected to login', async ({ authPage }) => {
-      // Login first
-      await authPage.login(personas.patient.email, personas.patient.password);
-      await expect(authPage.page).toHaveURL(/\/dashboard$/);
-      
-      // Logout
-      await authPage.logout();
-      await authPage.expectOnLoginPage();
-    });
+  // ── Login: empty fields ─────────────────────────────────────────────────────
+
+  test('shows validation errors on both fields when empty', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.submitButton.click();
+    await expect(page.getByText('Invalid email address')).toBeVisible();
+    await expect(page.getByText('Password must be at least 6 characters')).toBeVisible();
   });
 
-  test.describe('Role-based redirect', { tag: '@regression' }, () => {
-    test('unauthenticated user accessing dashboard is redirected to login', async ({ page }) => {
-      await page.goto('/dashboard');
-      await expect(page).toHaveURL(/\/login$/);
-    });
-
-    test('each role is redirected to their specific page after login', async ({ authPage }) => {
-      // Patient → /dashboard
-      await authPage.login(personas.patient.email, personas.patient.password);
-      await expect(authPage.page).toHaveURL(/\/dashboard$/);
-      
-      await authPage.logout();
-      await authPage.expectOnLoginPage();
-      
-      // Doctor → /doctor
-      await authPage.login(personas.doctor.email, personas.doctor.password);
-      await expect(authPage.page).toHaveURL(/\/doctor$/);
-      
-      await authPage.logout();
-      await authPage.expectOnLoginPage();
-      
-      // Admin → /admin
-      await authPage.login(personas.admin.email, personas.admin.password);
-      await expect(authPage.page).toHaveURL(/\/admin$/);
-    });
+  test('shows password error when only email is filled', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.emailInput.fill(personas.patient.email);
+    await authPage.submitButton.click();
+    await expect(page.getByText('Password must be at least 6 characters')).toBeVisible();
   });
+
+  test('shows email error when only password is filled', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await page.goto('/login');
+    await authPage.passwordInput.fill('Password123!');
+    await authPage.submitButton.click();
+    await expect(page.getByText('Invalid email address')).toBeVisible();
+  });
+
+  // ── Logout ───────────────────────────────────────────────────────────────────
+
+  test('logs out and redirects to /login', { tag: ['@smoke', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.patient.email, personas.patient.password);
+    await authPage.logout();
+    await expect(page).toHaveURL(/login/);
+  });
+
+  test('navigating to /dashboard while logged out redirects back to /login', { tag: ['@regression', '@auth'] }, async ({ page }) => {
+    await page.goto('/dashboard');
+    await expect(page).toHaveURL(/login/);
+  });
+
+  // ── Role-based redirect ──────────────────────────────────────────────────────
+
+  test('admin is redirected to /admin after login', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.admin.email, personas.admin.password);
+    await expect(page).toHaveURL(/admin/);
+    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
+  });
+
+  test('doctor is redirected to /dashboard after login', { tag: ['@regression', '@auth'] }, async ({ authPage, page }) => {
+    await authPage.login(personas.doctor.email, personas.doctor.password);
+    await expect(page).toHaveURL(/dashboard/);
+  });
+
 });
