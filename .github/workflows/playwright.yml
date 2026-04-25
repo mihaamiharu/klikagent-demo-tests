@@ -1,0 +1,46 @@
+name: Playwright Tests
+
+on:
+  pull_request:
+    branches:
+      - 'qa/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps
+
+      - run: npx playwright test --reporter=html
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Report to KlikAgent
+        if: success() || failure()
+        run: |
+          curl -X POST "${{ secrets.KLIKAGENT_CALLBACK_URL }}"
+            -H "Content-Type: application/json"
+            -d '{
+              "event": "playwright.test.completed",
+              "repo": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "run_id": "${{ github.run_id }}",
+              "status": "${{ job.status }}",
+              "report_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }'
+        env:
+          KLIKAGENT_CALLBACK_URL: ${{ secrets.KLIKAGENT_CALLBACK_URL }}
