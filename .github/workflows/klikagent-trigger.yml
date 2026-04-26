@@ -47,13 +47,14 @@ jobs:
               qaEnvUrl,
               outputRepo,
               feature,
-              callbackUrl: `${process.env.KLIKAGENT_URL}/tasks/${taskId}/results`,
               metadata: {
                 issueUrl:    context.payload.issue.html_url,
+                repoFullName: context.payload.repository.full_name,
                 senderLogin: context.payload.sender.login,
               },
             };
 
+            // Call the Trigger Service (which will forward to KlikAgent and handle the callback)
             const res = await fetch(`${process.env.KLIKAGENT_URL}/tasks`, {
               method:  'POST',
               headers: { 'Content-Type': 'application/json' },
