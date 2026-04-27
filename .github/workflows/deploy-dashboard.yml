@@ -26,7 +26,7 @@ jobs:
         with:
           name: dashboard-data
           path: docs/
-          workflow-run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
