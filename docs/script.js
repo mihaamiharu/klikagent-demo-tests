@@ -258,7 +258,7 @@ function showRunDetail(run) {
           ${test.attachments?.length ? `
             <div class="attachments">
               <div class="test-info-label">Attachments</div>
-              ${test.attachments.map(a => `<span class="attachment-item">${a.name} (${a.contentType})</span>`).join('')}
+              ${test.attachments.map(a => renderAttachment(a, run.runId)).join('')}
             </div>
           ` : ''}
         </div>
@@ -292,6 +292,47 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+function renderAttachment(attachment, runId) {
+  const artifactUrl = `https://github.com/${OWNER}/${REPO}/actions/runs/${runId}`;
+
+  if (attachment.name === 'screenshot' && attachment.data) {
+    return `<div class="attachment-screenshot">
+      <div class="test-info-label">Screenshot</div>
+      <img src="data:${attachment.contentType};base64,${attachment.data}" alt="_failure screenshot" style="max-width: 100%; border-radius: 4px; margin-top: 0.5rem; cursor: pointer;" onclick="this.style.max-width = this.style.maxWidth === '100%' ? '50%' : '100%'" />
+    </div>`;
+  }
+
+  if (attachment.name === 'error-context' && attachment.data) {
+    const decoded = atob(attachment.data);
+    return `<div class="attachment-error-context">
+      <div class="test-info-label">Error Context <span style="font-weight: normal; color: #666;">(click to expand)</span></div>
+      <details style="margin-top: 0.5rem;">
+        <summary style="cursor: pointer; color: #3498db;">View error context</summary>
+        <pre style="background: #f7f7f7; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; margin-top: 0.5rem;">${escapeHtml(decoded)}</pre>
+      </details>
+    </div>`;
+  }
+
+  if (attachment.name === 'video' || attachment.name === 'trace') {
+    return `<div class="attachment-link">
+      <a href="${artifactUrl}" target="_blank" class="attachment-item">
+        📎 ${attachment.name} (${formatBytes(attachment.data?.length || 0)})
+      </a>
+      <span style="color: #666; font-size: 0.75rem; margin-left: 0.5rem;">View in GitHub Actions</span>
+    </div>`;
+  }
+
+  return `<span class="attachment-item">${attachment.name} (${attachment.contentType})</span>`;
+}
+
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
 
 function applyFilters() {
