@@ -7,6 +7,12 @@ export default defineConfig({
     baseURL: 'https://app.testingwithekki.com',
     headless: true,
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'retain-on-failure',
   },
-  reporter: [['html', { open: 'never' }]],
+  reporter: [
+    ['html', { open: 'never' }],
+    ['json', { outputFile: 'test-results.json' }],
+    ['./reporters/dashboard.ts'],
+  ],
 });
