@@ -18,6 +18,13 @@ interface TestStep {
   steps?: TestStep[];
 }
 
+interface Attachment {
+  name: string;
+  contentType: string;
+  path?: string;
+  data?: string;
+}
+
 interface EnrichedTestResult {
   testId: string;
   title: string;
@@ -28,7 +35,7 @@ interface EnrichedTestResult {
   error?: string;
   stackTrace?: string;
   retry: number;
-  attachments: { name: string; contentType: string; path?: string }[];
+  attachments: Attachment[];
   steps: TestStep[];
   tags: string[];
   stdout: string[];
@@ -67,6 +74,22 @@ class DashboardReporter implements Reporter {
   onTestEnd(test: TestCase, result: TestResult): void {
     const error = result.errors[0];
 
+    const attachments: Attachment[] = result.attachments.map((a) => {
+      const attachment: Attachment = {
+        name: a.name,
+        contentType: a.contentType,
+        path: a.path,
+      };
+
+      if (a.path && fs.existsSync(a.path)) {
+        const fileBuffer = fs.readFileSync(a.path);
+        const base64 = fileBuffer.toString('base64');
+        attachment.data = base64;
+      }
+
+      return attachment;
+    });
+
     const enrichedResult: EnrichedTestResult = {
       testId: test.id,
       title: test.title,
@@ -81,11 +104,7 @@ class DashboardReporter implements Reporter {
       error: error?.message,
       stackTrace: error?.stack,
       retry: result.retry,
-      attachments: result.attachments.map((a) => ({
-        name: a.name,
-        contentType: a.contentType,
-        path: a.path,
-      })),
+      attachments,
       steps: this.flattenSteps(result.steps),
       tags: test.tags,
       stdout: result.stdout.map((s) => s.toString()),
