@@ -1,4 +1,1561 @@
 {
-  "lastUpdated": "2026-04-27T00:00:00.000Z",
-  "runs": []
+  "lastUpdated": "2026-04-27T10:13:48.398Z",
+  "runs": [
+    {
+      "runId": "24987803507",
+      "runNumber": 31,
+      "branch": "32/merge",
+      "commitSha": "5bd586082d61877bd95375542cde1529c9995b54",
+      "commitMessage": "Local run",
+      "conclusion": "failed",
+      "createdAt": "2026-04-27T09:56:55.790Z",
+      "duration": 11579.687,
+      "totalTests": 11,
+      "passed": 0,
+      "failed": 11,
+      "skipped": 0,
+      "tests": [
+        {
+          "testId": "497bcf29fe68b1550cc4-042d92e2f84d40644d04",
+          "title": "patient logs in and is redirected to /dashboard with welcome message and sidebar info",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — valid credentials",
+            "patient logs in and is redirected to /dashboard with welcome message and sidebar info"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 14,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 233,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-1d632-me-message-and-sidebar-info/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-1d632-me-message-and-sidebar-info/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-1d632-me-message-and-sidebar-info/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-1d632-me-message-and-sidebar-info/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 1246,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 1244,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 1166,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 1163
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 16,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 7
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 42,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 39
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 182,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 128,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 85
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 26,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 22
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@smoke"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-44ffe2ab9cd48b1a82ac",
+          "title": "admin logs in and is redirected to /admin",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — valid credentials",
+            "admin logs in and is redirected to /admin"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 25,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 287,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-56356--and-is-redirected-to-admin/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-56356--and-is-redirected-to-admin/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-56356--and-is-redirected-to-admin/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-56356--and-is-redirected-to-admin/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 146,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 146,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 64,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 60
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 20,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 9
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 37,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 35
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 235,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 1
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 175,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 97
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 25,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 20
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@smoke"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-9ba3fe9d4b9f36dc11e8",
+          "title": "doctor logs in and is redirected to /doctor",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — valid credentials",
+            "doctor logs in and is redirected to /doctor"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 32,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 239,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-20b55-and-is-redirected-to-doctor/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-20b55-and-is-redirected-to-doctor/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-20b55-and-is-redirected-to-doctor/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-20b55-and-is-redirected-to-doctor/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 147,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 146,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 66,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 63
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 20,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 8
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 37,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 35
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 186,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 129,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 84
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 23,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 20
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@smoke"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-500e8ccd57cadf6ea9fd",
+          "title": "wrong password shows error and stays on /login",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — invalid credentials",
+            "wrong password shows error and stays on /login"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 41,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 253,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-7e9ce-ws-error-and-stays-on-login/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-7e9ce-ws-error-and-stays-on-login/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-7e9ce-ws-error-and-stays-on-login/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-7e9ce-ws-error-and-stays-on-login/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 149,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 149,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 64,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 60
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 18,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 10
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 45,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 43
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 192,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 136,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 90
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 26,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 22
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-324442f25d70bfdfb329",
+          "title": "non-existent email shows error and stays on /login",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — invalid credentials",
+            "non-existent email shows error and stays on /login"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 48,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 231,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-12939-ws-error-and-stays-on-login/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-12939-ws-error-and-stays-on-login/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-12939-ws-error-and-stays-on-login/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-12939-ws-error-and-stays-on-login/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 151,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 151,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 64,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 60
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 16,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 9
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 42,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 41
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 177,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 128,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 85
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 24,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 21
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-70ec34d7931ad28fba3a",
+          "title": "email field retains its value after failed attempt",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — invalid credentials",
+            "email field retains its value after failed attempt"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 55,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 241,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-18135--value-after-failed-attempt/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-18135--value-after-failed-attempt/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-18135--value-after-failed-attempt/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-18135--value-after-failed-attempt/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 149,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 148,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 69,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 66
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 19,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 13
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 34,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 33
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 192,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 131,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 86
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 27,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 23
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-07833a0724da834dadf1",
+          "title": "both fields empty shows validation errors on both",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — empty fields validation",
+            "both fields empty shows validation errors on both"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 65,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 241,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-3a2ec-s-validation-errors-on-both/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-3a2ec-s-validation-errors-on-both/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-3a2ec-s-validation-errors-on-both/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-3a2ec-s-validation-errors-on-both/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 143,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 142,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 62,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 58
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 21,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 9
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 38,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 37
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 187,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 1
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 128,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 84
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 24,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 20
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-7700c39f17b2cf04a36e",
+          "title": "only email filled shows password validation error",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — empty fields validation",
+            "only email filled shows password validation error"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 72,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 251,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f8e8f-s-password-validation-error/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f8e8f-s-password-validation-error/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f8e8f-s-password-validation-error/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f8e8f-s-password-validation-error/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 154,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 153,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 70,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 66
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 18,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 9
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 42,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 40
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 197,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 140,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 94
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 22,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 18
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-df3219cc65912b755c22",
+          "title": "only password filled shows email validation error",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Login — empty fields validation",
+            "only password filled shows email validation error"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 79,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 244,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f2211-hows-email-validation-error/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f2211-hows-email-validation-error/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f2211-hows-email-validation-error/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-f2211-hows-email-validation-error/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 148,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 146,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 66,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 62
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 17,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 10
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 42,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 41
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 190,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 130,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 84
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 21,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 18
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@regression"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-af41d4cebd4495e6c3bc",
+          "title": "authenticated user clicks logout and is redirected to /login",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Logout",
+            "authenticated user clicks logout and is redirected to /login"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 88,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 244,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-53ddb--and-is-redirected-to-login/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-53ddb--and-is-redirected-to-login/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-53ddb--and-is-redirected-to-login/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-53ddb--and-is-redirected-to-login/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 145,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 143,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 64,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 59
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 20,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 8
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 39,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 37
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 189,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 130,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 86
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 25,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 21
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@smoke"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "testId": "497bcf29fe68b1550cc4-be8ffa7b322f28bdf362",
+          "title": "navigating to /dashboard while logged out redirects to /login",
+          "titlePath": [
+            "",
+            "",
+            "web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "Auth | Login, validation, logout, and role-based redirect",
+            "Logout",
+            "navigating to /dashboard while logged out redirects to /login"
+          ],
+          "location": {
+            "file": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts",
+            "line": 96,
+            "column": 9
+          },
+          "status": "failed",
+          "duration": 234,
+          "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+          "stackTrace": "TypeError: Cannot read properties of undefined (reading 'getByTestId')\n    at AuthPage (/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/pages/auth/AuthPage.ts:6:35)\n    at /home/runner/work/klikagent-demo-tests/klikagent-demo-tests/tests/web/auth/auth-flow-login-validation-logout-and-ro.spec.ts:9:16",
+          "retry": 0,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "contentType": "image/png",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-5e843-gged-out-redirects-to-login/test-failed-1.png"
+            },
+            {
+              "name": "video",
+              "contentType": "video/webm",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-5e843-gged-out-redirects-to-login/video.webm"
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-5e843-gged-out-redirects-to-login/error-context.md"
+            },
+            {
+              "name": "trace",
+              "contentType": "application/zip",
+              "path": "/home/runner/work/klikagent-demo-tests/klikagent-demo-tests/test-results/web-auth-auth-flow-login-v-5e843-gged-out-redirects-to-login/trace.zip"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Before Hooks",
+              "category": "hook",
+              "duration": 149,
+              "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+              "steps": [
+                {
+                  "title": "beforeEach hook",
+                  "category": "hook",
+                  "duration": 147,
+                  "error": "TypeError: Cannot read properties of undefined (reading 'getByTestId')",
+                  "steps": [
+                    {
+                      "title": "Fixture \"browser\"",
+                      "category": "fixture",
+                      "duration": 69,
+                      "steps": [
+                        {
+                          "title": "Launch browser",
+                          "category": "pw:api",
+                          "duration": 66
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"context\"",
+                      "category": "fixture",
+                      "duration": 15,
+                      "steps": [
+                        {
+                          "title": "Create context",
+                          "category": "pw:api",
+                          "duration": 8
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Fixture \"page\"",
+                      "category": "fixture",
+                      "duration": 42,
+                      "steps": [
+                        {
+                          "title": "Create page",
+                          "category": "pw:api",
+                          "duration": 41
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "After Hooks",
+              "category": "hook",
+              "duration": 182,
+              "steps": [
+                {
+                  "title": "Fixture \"page\"",
+                  "category": "fixture",
+                  "duration": 0
+                },
+                {
+                  "title": "Fixture \"context\"",
+                  "category": "fixture",
+                  "duration": 125,
+                  "steps": [
+                    {
+                      "title": "Close context",
+                      "category": "pw:api",
+                      "duration": 82
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Worker Cleanup",
+              "category": "hook",
+              "duration": 26,
+              "steps": [
+                {
+                  "title": "Fixture \"browser\"",
+                  "category": "fixture",
+                  "duration": 23
+                }
+              ]
+            }
+          ],
+          "tags": [
+            "@auth",
+            "@smoke"
+          ],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    }
+  ]
 }
