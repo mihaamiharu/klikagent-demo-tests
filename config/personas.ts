@@ -8,7 +8,7 @@ export const personas = {
   doctor: {
     email: 'dr.smith@caresync.dev',
     password: 'Password123!',
-    displayName: 'Dr. John Smith',
+    displayName: 'John Smith',
     role: 'doctor',
   },
   patient: {
