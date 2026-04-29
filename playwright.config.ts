@@ -3,6 +3,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   timeout: 30000,
+  workers: process.env.CI ? 3 : undefined,
   use: {
     baseURL: 'https://app.testingwithekki.com',
     headless: true,
