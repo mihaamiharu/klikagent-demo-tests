@@ -104,7 +104,12 @@ export class AuthPage {
   }
 
   async expectWelcomeHeading(textPattern: string | RegExp): Promise<void> {
-    const heading = this.page.getByRole('heading');
+    const heading = this.page.getByRole('heading', { level: 1 });
     await expect(heading).toContainText(textPattern);
+  }
+
+  async expectAdminHeading(): Promise<void> {
+    const heading = this.page.getByRole('heading', { level: 1 });
+    await expect(heading).toContainText(/Admin Dashboard/);
   }
 }
