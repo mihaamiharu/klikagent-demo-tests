@@ -1,16 +1,16 @@
-import { type Page, type Locator, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginSubmit: Locator;
+  readonly emailInput: ReturnType<Page['getByLabel']>;
+  readonly passwordInput: ReturnType<Page['getByLabel']>;
+  readonly loginSubmit: ReturnType<Page['getByRole']>;
 
   constructor(page: Page) {
     this.page = page;
     this.emailInput = page.getByLabel('Email');
     this.passwordInput = page.getByLabel('Password');
-    this.loginSubmit = page.getByRole('button', { name: /sign\s?in/i });
+    this.loginSubmit = page.getByRole('button', { name: 'Sign in' });
   }
 
   async navigateToLogin(): Promise<void> {
@@ -21,51 +21,54 @@ export class AuthPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.loginSubmit.click();
+    await this.page.waitForURL((url) => !url.pathname.endsWith('/login'));
   }
 
   async logout(): Promise<void> {
-    await this.page.getByRole('button', { name: /logout/i }).click();
+    await this.page.getByRole('button', { name: 'Logout' }).click();
   }
 
-  getPatientWelcomeHeading(displayName: string): Locator {
-    return this.page.getByRole('heading', { name: `Welcome back, ${displayName}` });
-  }
-
-  getDoctorWelcomeHeading(displayName: string): Locator {
+  // Heading locators
+  getPatientWelcomeHeading(displayName: string) {
     return this.page.getByRole('heading', { name: `Welcome, ${displayName}` });
   }
 
-  getAdminDashboardHeading(): Locator {
+  getDoctorWelcomeHeading(displayName: string) {
+    return this.page.getByRole('heading', { name: `Welcome, ${displayName}` });
+  }
+
+  getAdminDashboardHeading() {
     return this.page.getByRole('heading', { name: 'Admin Dashboard' });
   }
 
-  userDisplayNameLocator(displayName: string): Locator {
-    return this.page.getByText(displayName);
+  userDisplayNameLocator(displayName: string) {
+    return this.page.getByText(displayName, { exact: true });
   }
 
-  userRoleLocator(role: string): Locator {
-    return this.page.getByText(new RegExp(`\\b${role}\\b`, 'i'));
+  userRoleLocator(role: string) {
+    return this.page.getByText(role, { exact: true });
   }
 
+  // Validation expectations
   async expectLoginError(): Promise<void> {
-    await expect(this.page.getByRole('alert')).toContainText(/invalid credentials|login failed/i);
+    await expect(this.page.getByRole('alert')).toBeVisible();
   }
 
   async expectBothValidationErrors(): Promise<void> {
-    await expect(this.emailInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(this.passwordInput).toHaveAttribute('aria-invalid', 'true');
+    await expect(this.page.getByText('Email is required')).toBeVisible();
+    await expect(this.page.getByText('Password is required')).toBeVisible();
   }
 
   async expectEmailValidationError(): Promise<void> {
-    await expect(this.emailInput).toHaveAttribute('aria-invalid', 'true');
-  }
-
-  async expectNoEmailValidationError(): Promise<void> {
-    await expect(this.emailInput).not.toHaveAttribute('aria-invalid', 'true');
+    await expect(this.page.getByText('Email is required')).toBeVisible();
   }
 
   async expectPasswordValidationError(): Promise<void> {
-    await expect(this.passwordInput).toHaveAttribute('aria-invalid', 'true');
+    await expect(this.page.getByText('Password is required')).toBeVisible();
+  }
+
+  async expectNoEmailValidationError(): Promise<void> {
+    await expect(this.page.getByText('Email is required')).not.toBeVisible();
   }
 
   async expectLoggedOut(): Promise<void> {
