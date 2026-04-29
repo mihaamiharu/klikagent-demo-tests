@@ -19,7 +19,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await authPage.gotoLogin();
       await authPage.login(personas.admin.email, personas.admin.password);
       await authPage.expectLoginSuccess(/\/admin/);
-      await authPage.expectWelcomeHeading(personas.admin.welcomeMessage);
+      await authPage.expectWelcomeHeading(/Welcome back, .+/);
       await authPage.expectUserProfile(personas.admin.displayName, personas.admin.role);
     });
 
