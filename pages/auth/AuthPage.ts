@@ -13,6 +13,18 @@ export class AuthPage {
     await this.page.getByRole('button', { name: /sign\s?in/i }).click();
   }
 
+  async fillEmail(email: string): Promise<void> {
+    await this.page.getByLabel('Email').fill(email);
+  }
+
+  async fillPassword(password: string): Promise<void> {
+    await this.page.getByLabel('Password').fill(password);
+  }
+
+  async clickLoginButton(): Promise<void> {
+    await this.page.getByRole('button', { name: /sign\s?in/i }).click();
+  }
+
   async expectUserLoggedIn(): Promise<void> {
     await expect(this.page.getByText('Dashboard')).toBeVisible({ timeout: 10000 });
   }
@@ -35,5 +47,9 @@ export class AuthPage {
 
   async navigateToLoginPage(): Promise<void> {
     await this.page.goto('/login');
+  }
+
+  async navigateToDashboard(): Promise<void> {
+    await this.page.goto('/dashboard');
   }
 }
