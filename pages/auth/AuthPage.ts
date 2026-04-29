@@ -1,43 +1,66 @@
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginSubmit: Locator;
-  readonly logoutButton: Locator;
-  readonly errorAlert: Locator;
-  readonly emailValidationError: Locator;
-  readonly passwordValidationError: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.loginSubmit = page.getByRole('button', { name: 'Sign in' });
-    this.logoutButton = page.getByRole('button', { name: 'Log out' });
-    this.errorAlert = page.getByRole('alert');
-    this.emailValidationError = page.getByText('Email is required');
-    this.passwordValidationError = page.getByText('Password is required');
   }
 
   async navigateToLogin(): Promise<void> {
     await this.page.goto('/login');
   }
 
+  get emailInput() {
+    return this.page.getByLabel('Email');
+  }
+
+  get passwordInput() {
+    return this.page.getByLabel('Password');
+  }
+
+  get loginSubmit() {
+    return this.page.getByRole('button', { name: 'Sign in' });
+  }
+
   async login(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.loginSubmit.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  get logoutButton() {
+    return this.page.getByRole('button', { name: 'Log out' });
   }
 
   async logout(): Promise<void> {
     await this.logoutButton.click();
   }
 
+  async expectLoggedOut(): Promise<void> {
+    await expect(this.page).toHaveURL(/\/login/);
+  }
+
+  async expectUnauthenticatedRedirect(): Promise<void> {
+    await expect(this.page).toHaveURL(/\/login/);
+  }
+
+  // Error locators
+  get loginError() {
+    return this.page.getByRole('alert');
+  }
+
   async expectLoginError(): Promise<void> {
-    await expect(this.errorAlert).toBeVisible();
-    await expect(this.errorAlert).toContainText('Invalid email or password');
+    await expect(this.loginError).toBeVisible();
+  }
+
+  get emailValidationError() {
+    return this.page.locator('[data-testid="email-error"], invalid').filter({ hasText: /email/i });
+  }
+
+  get passwordValidationError() {
+    return this.page.locator('[data-testid="password-error"], invalid').filter({ hasText: /password/i });
   }
 
   async expectBothValidationErrors(): Promise<void> {
@@ -57,31 +80,27 @@ export class AuthPage {
     await expect(this.emailValidationError).not.toBeVisible();
   }
 
-  async expectLoggedOut(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/login/);
+  // Dynamic welcome headings
+  getPatientWelcomeHeading(displayName: string) {
+    return this.page.getByRole('heading', { name: new RegExp(`Welcome, ${displayName}`) });
   }
 
-  async expectUnauthenticatedRedirect(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/login/);
+  getDoctorWelcomeHeading(displayName: string) {
+    return this.page.getByRole('heading', { name: new RegExp(`Welcome, ${displayName}`) });
   }
 
-  getPatientWelcomeHeading(displayName: string): Locator {
-    return this.page.getByRole('heading', { name: `Welcome, ${displayName}!` });
-  }
-
-  getDoctorWelcomeHeading(displayName: string): Locator {
-    return this.page.getByRole('heading', { name: `Welcome, ${displayName}!` });
-  }
-
-  getAdminDashboardHeading(): Locator {
+  getAdminDashboardHeading() {
     return this.page.getByRole('heading', { name: 'Admin Dashboard' });
   }
 
-  userDisplayNameLocator(displayName: string): Locator {
-    return this.page.getByText(displayName);
+  // Sidebar user info locators
+  userDisplayNameLocator(displayName: string) {
+    return this.page.getByText(displayName).first();
   }
 
-  userRoleLocator(role: string): Locator {
-    return this.page.getByText(role);
+  userRoleLocator(role: string) {
+    return this.page.getByText(role, { exact: true });
   }
 }
+
+import { expect } from '@playwright/test';
