@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
@@ -11,15 +11,15 @@ export class AuthPage {
     await this.page.goto('/login');
   }
 
-  get emailInput() {
+  get emailInput(): Locator {
     return this.page.getByLabel('Email');
   }
 
-  get passwordInput() {
+  get passwordInput(): Locator {
     return this.page.getByLabel('Password');
   }
 
-  get loginSubmit() {
+  get loginSubmit(): Locator {
     return this.page.getByRole('button', { name: 'Sign in' });
   }
 
@@ -30,7 +30,7 @@ export class AuthPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  get logoutButton() {
+  get logoutButton(): Locator {
     return this.page.getByRole('button', { name: 'Log out' });
   }
 
@@ -47,7 +47,7 @@ export class AuthPage {
   }
 
   // Error locators
-  get loginError() {
+  get loginError(): Locator {
     return this.page.getByRole('alert');
   }
 
@@ -55,12 +55,12 @@ export class AuthPage {
     await expect(this.loginError).toBeVisible();
   }
 
-  get emailValidationError() {
-    return this.page.locator('[data-testid="email-error"], invalid').filter({ hasText: /email/i });
+  get emailValidationError(): Locator {
+    return this.page.locator('[data-testid="email-error"], [aria-invalid="true"]').filter({ hasText: /email/i });
   }
 
-  get passwordValidationError() {
-    return this.page.locator('[data-testid="password-error"], invalid').filter({ hasText: /password/i });
+  get passwordValidationError(): Locator {
+    return this.page.locator('[data-testid="password-error"], [aria-invalid="true"]').filter({ hasText: /password/i });
   }
 
   async expectBothValidationErrors(): Promise<void> {
@@ -80,27 +80,25 @@ export class AuthPage {
     await expect(this.emailValidationError).not.toBeVisible();
   }
 
-  // Dynamic welcome headings
-  getPatientWelcomeHeading(displayName: string) {
+  // Dynamic welcome headings (methods, not getters — they take displayName as param)
+  getPatientWelcomeHeading(displayName: string): Locator {
     return this.page.getByRole('heading', { name: new RegExp(`Welcome, ${displayName}`) });
   }
 
-  getDoctorWelcomeHeading(displayName: string) {
+  getDoctorWelcomeHeading(displayName: string): Locator {
     return this.page.getByRole('heading', { name: new RegExp(`Welcome, ${displayName}`) });
   }
 
-  getAdminDashboardHeading() {
+  getAdminDashboardHeading(): Locator {
     return this.page.getByRole('heading', { name: 'Admin Dashboard' });
   }
 
   // Sidebar user info locators
-  userDisplayNameLocator(displayName: string) {
+  userDisplayNameLocator(displayName: string): Locator {
     return this.page.getByText(displayName).first();
   }
 
-  userRoleLocator(role: string) {
+  userRoleLocator(role: string): Locator {
     return this.page.getByText(role, { exact: true });
   }
 }
-
-import { expect } from '@playwright/test';
