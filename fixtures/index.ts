@@ -1,16 +1,15 @@
-import { test as base } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { AuthPage } from '../pages/auth/AuthPage';
-
-// POMs are added here as KlikAgent generates and reviews them.
-// After each PR is merged, import the new POM and register it below.
 
 type Fixtures = {
   authPage: AuthPage;
 };
 
 export const test = base.extend<Fixtures>({
-  authPage: async ({ page }, use) => {
-    await use(new AuthPage(page));
+  authPage: async ({ page }: { page: Page }, use: (authPage: AuthPage) => Promise<void>) => {
+    const authPage = new AuthPage(page);
+    await use(authPage);
   },
 });
 
