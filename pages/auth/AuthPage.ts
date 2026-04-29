@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
@@ -6,13 +6,19 @@ export class AuthPage {
   readonly passwordInput: Locator;
   readonly loginSubmit: Locator;
   readonly logoutButton: Locator;
+  readonly errorAlert: Locator;
+  readonly emailValidationError: Locator;
+  readonly passwordValidationError: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.emailInput = page.getByLabel('Email');
     this.passwordInput = page.getByLabel('Password');
     this.loginSubmit = page.getByRole('button', { name: 'Sign in' });
-    this.logoutButton = page.getByRole('button', { name: 'Logout' });
+    this.logoutButton = page.getByRole('button', { name: 'Log out' });
+    this.errorAlert = page.getByRole('alert');
+    this.emailValidationError = page.getByText('Email is required');
+    this.passwordValidationError = page.getByText('Password is required');
   }
 
   async navigateToLogin(): Promise<void> {
@@ -23,64 +29,32 @@ export class AuthPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.loginSubmit.click();
-    await this.page.waitForLoadState('networkidle');
   }
 
   async logout(): Promise<void> {
     await this.logoutButton.click();
   }
 
-  async getPatientWelcomeHeading(displayName: string): Promise<Locator> {
-    return this.page.getByRole('heading', { name: `Welcome, ${displayName}` });
-  }
-
-  async getDoctorWelcomeHeading(displayName: string): Promise<Locator> {
-    return this.page.getByRole('heading', { name: `Welcome, ${displayName}` });
-  }
-
-  getAdminDashboardHeading(): Locator {
-    return this.page.getByRole('heading', { name: 'Admin Dashboard' });
-  }
-
-  userDisplayNameLocator(displayName: string): Locator {
-    return this.page.getByText(displayName).first();
-  }
-
-  userRoleLocator(role: string): Locator {
-    return this.page.getByText(role, { exact: true }).first();
-  }
-
-  private get errorMessage(): Locator {
-    return this.page.getByRole('alert');
-  }
-
   async expectLoginError(): Promise<void> {
-    await expect(this.errorMessage).toBeVisible();
-  }
-
-  private get emailError(): Locator {
-    return this.page.locator('[data-testid="email-error"]');
-  }
-
-  private get passwordError(): Locator {
-    return this.page.locator('[data-testid="password-error"]');
+    await expect(this.errorAlert).toBeVisible();
+    await expect(this.errorAlert).toContainText('Invalid email or password');
   }
 
   async expectBothValidationErrors(): Promise<void> {
-    await expect(this.emailError).toBeVisible();
-    await expect(this.passwordError).toBeVisible();
+    await expect(this.emailValidationError).toBeVisible();
+    await expect(this.passwordValidationError).toBeVisible();
   }
 
   async expectEmailValidationError(): Promise<void> {
-    await expect(this.emailError).toBeVisible();
+    await expect(this.emailValidationError).toBeVisible();
   }
 
   async expectPasswordValidationError(): Promise<void> {
-    await expect(this.passwordError).toBeVisible();
+    await expect(this.passwordValidationError).toBeVisible();
   }
 
   async expectNoEmailValidationError(): Promise<void> {
-    await expect(this.emailError).not.toBeVisible();
+    await expect(this.emailValidationError).not.toBeVisible();
   }
 
   async expectLoggedOut(): Promise<void> {
@@ -89,5 +63,25 @@ export class AuthPage {
 
   async expectUnauthenticatedRedirect(): Promise<void> {
     await expect(this.page).toHaveURL(/\/login/);
+  }
+
+  getPatientWelcomeHeading(displayName: string): Locator {
+    return this.page.getByRole('heading', { name: `Welcome, ${displayName}!` });
+  }
+
+  getDoctorWelcomeHeading(displayName: string): Locator {
+    return this.page.getByRole('heading', { name: `Welcome, ${displayName}!` });
+  }
+
+  getAdminDashboardHeading(): Locator {
+    return this.page.getByRole('heading', { name: 'Admin Dashboard' });
+  }
+
+  userDisplayNameLocator(displayName: string): Locator {
+    return this.page.getByText(displayName);
+  }
+
+  userRoleLocator(role: string): Locator {
+    return this.page.getByText(role);
   }
 }
