@@ -1,8 +1,4 @@
 import { test as base } from '@playwright/test';
-
-// POMs are added here as KlikAgent generates and reviews them.
-// After each PR is merged, import the new POM and register it below.
-
 import { AuthPage } from '../pages/auth/AuthPage';
 
 type Fixtures = {
