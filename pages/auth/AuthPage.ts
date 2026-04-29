@@ -1,44 +1,60 @@
-import type { Page } from '@playwright/test';
-import { Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
+import { personas } from '../../config/personas';
 
 export class AuthPage {
   readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly submitButton: Locator;
+  readonly alertMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.alertMessage = page.getByRole('alert');
   }
 
-  async goto() {
-    await this.page.goto('/login');
+  async login(email: string, password: string): Promise<void> {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
   }
 
-  async login(email: string, password: string) {
-    await this.page.getByLabel('Email').fill(email);
-    await this.page.getByLabel('Password').fill(password);
-    await this.page.getByRole('button', { name: 'Sign in' }).click();
+  async loginAsAdmin(): Promise<void> {
+    await this.login(personas.admin.email, personas.admin.password);
   }
 
-  async submitLogin() {
-    await this.page.getByRole('button', { name: 'Sign in' }).click();
+  async loginAsDoctor(): Promise<void> {
+    await this.login(personas.doctor.email, personas.doctor.password);
   }
 
-  getAlert(): Locator {
-    return this.page.getByRole('alert');
+  async loginAsPatient(): Promise<void> {
+    await this.login(personas.patient.email, personas.patient.password);
   }
 
-  getDashboardHeading(): Locator {
-    return this.page.getByRole('heading', { level: 1 });
+  async expectValidationError(): Promise<void> {
+    await expect(this.alertMessage).toBeVisible();
   }
 
-  getUserRoleText(): Locator {
-    return this.page.getByText(/(admin|doctor|patient)/i);
+  async expectInvalidCredentialsError(): Promise<void> {
+    await expect(this.alertMessage).toContainText('Invalid');
   }
 
-  getLoginHeading(): Locator {
-    return this.page.getByRole('heading', { name: 'Sign in to CareSync' });
+  async logout(): Promise<void> {
+    await this.page.getByRole('button', { name: /logout|sign out/i }).click();
   }
 
-  async logout() {
-    await this.page.getByRole('complementary').getByRole('button', { name: 'Log out' }).click();
+  async expectOnLoginPage(): Promise<void> {
+    await expect(this.page).toHaveURL(/login/);
+  }
+
+  async expectOnDashboard(): Promise<void> {
+    await expect(this.page).toHaveURL(/dashboard|admin|doctor|patient/);
+  }
+
+  async expectUserInfo(email: string, displayName: string): Promise<void> {
+    await expect(this.page.getByText(displayName)).toBeVisible();
   }
 }
