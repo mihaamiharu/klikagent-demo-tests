@@ -1,14 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-interface Persona {
-  email: string;
-  password: string;
-  displayName: string;
-  firstName: string;
-  role: string;
-  route: string;
-}
-
 export class AuthPage {
   readonly page: Page;
 
@@ -51,9 +42,11 @@ export class AuthPage {
   }
 
   /**
-   * Returns a dynamic welcome heading locator for a given first name
+   * Returns a dynamic welcome heading locator for a given displayName.
+   * Extracts the first name (first word) to match "Welcome back, Jane!" format.
    */
-  welcomeHeading(firstName: string): Locator {
+  welcomeHeading(displayName: string): Locator {
+    const firstName = displayName.split(' ')[0];
     return this.page.getByRole('heading', { name: new RegExp(`Welcome.*${firstName}`, 'i') });
   }
 
@@ -78,13 +71,6 @@ export class AuthPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.signInButton.click();
-  }
-
-  /**
-   * Login with persona credentials
-   */
-  async loginAs(persona: Persona): Promise<void> {
-    await this.login(persona.email, persona.password);
   }
 
   /**
@@ -114,18 +100,9 @@ export class AuthPage {
   /**
    * Assert user profile is visible in sidebar
    */
-  async expectUserProfile(persona: Persona): Promise<void> {
-    await expect(this.sidebar.getByText(persona.displayName)).toBeVisible();
-    await expect(this.sidebar.getByText(persona.role)).toBeVisible();
-  }
-
-  /**
-   * Assert login was successful and user is on their role-specific page
-   */
-  async expectLoginSuccess(persona: Persona): Promise<void> {
-    await expect(this.page).toHaveURL(new RegExp(`/${persona.route}/`));
-    await expect(this.roleHeading(persona.role)).toBeVisible();
-    await this.expectUserProfile(persona);
+  async expectUserProfile(displayName: string, role: string): Promise<void> {
+    await expect(this.sidebar.getByText(displayName)).toBeVisible();
+    await expect(this.sidebar.getByText(role)).toBeVisible();
   }
 
   /**
