@@ -4,59 +4,36 @@ export class AuthPage {
   readonly page: Page;
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-  readonly logoutButton: Locator;
-  readonly alert: Locator;
+  readonly submitButton: Locator;
+  readonly alertMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.emailInput = page.getByLabel('Email');
     this.passwordInput = page.getByLabel('Password');
-    this.loginButton = page.getByRole('button', { name: /sign in/i });
-    this.logoutButton = page.getByRole('button', { name: /logout/i });
-    this.alert = page.getByRole('alert');
-  }
-
-  async navigateToLogin(): Promise<void> {
-    await this.page.goto('/login');
-  }
-
-  async navigateToDashboard(): Promise<void> {
-    await this.page.goto('/dashboard');
-  }
-
-  async fillEmail(email: string): Promise<void> {
-    await this.emailInput.fill(email);
-  }
-
-  async fillPassword(password: string): Promise<void> {
-    await this.passwordInput.fill(password);
-  }
-
-  async clickLoginButton(): Promise<void> {
-    await this.loginButton.click();
-  }
-
-  async clickLogoutButton(): Promise<void> {
-    await this.logoutButton.click();
+    this.submitButton = page.getByRole('button', { name: /sign in/i });
+    this.alertMessage = page.getByRole('alert');
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.navigateToLogin();
-    await this.fillEmail(email);
-    await this.fillPassword(password);
-    await this.clickLoginButton();
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
   }
 
-  getAlert(): Locator {
-    return this.alert;
+  async logout(): Promise<void> {
+    await this.page.getByRole('button', { name: /logout/i }).click();
   }
 
-  getLoginUrl(): Page {
-    return this.page;
+  async getAlert(): Promise<Locator> {
+    return this.alertMessage;
   }
 
-  getDashboardUrl(): Page {
-    return this.page;
+  getDashboardUrl(): RegExp {
+    return /\/dashboard/;
+  }
+
+  getLoginUrl(): RegExp {
+    return /\/login/;
   }
 }
