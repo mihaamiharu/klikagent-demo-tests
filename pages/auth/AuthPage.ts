@@ -99,7 +99,7 @@ export class AuthPage {
   }
 
   async expectUserProfile(name: string, role: string): Promise<void> {
-    await expect(this.sidebar.getByText(name)).toBeVisible();
+    await expect(this.sidebar.getByText(name, { exact: true })).toBeVisible();
     await expect(this.sidebar.getByText(role, { exact: true })).toBeVisible();
   }
 
