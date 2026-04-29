@@ -3,8 +3,8 @@ import { personas } from '../../../config/personas';
 import { AuthPage } from '../../../pages/auth/AuthPage';
 
 test.describe('Auth | Login, validation, logout, and role-based redirect', { tag: '@auth' }, () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/login');
+  test.beforeEach(async ({ authPage }) => {
+    await authPage.page.goto('/login');
   });
 
   test.describe('Login — valid credentials', { tag: '@smoke' }, () => {
