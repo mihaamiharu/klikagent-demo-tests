@@ -3,7 +3,7 @@ import { personas } from '../../config/personas';
 import { expect } from '@playwright/test';
 
 /**
- * AuthPage - POM for authentication flows (login, logout)
+ * QaAuthPage - POM for QA authentication flows (login, logout)
  * Feature: QA auth validation
  */
 export class QaAuthPage {
