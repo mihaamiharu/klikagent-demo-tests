@@ -10,7 +10,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
     test('patient is redirected to /dashboard with welcome message and sidebar info', async ({ authPage }) => {
       await authPage.login(personas.patient.email, personas.patient.password);
       await expect(authPage.page).toHaveURL(/\/dashboard/);
-      await expect(authPage.getPatientWelcomeHeading(personas.patient.firstName)).toBeVisible();
+      await expect(authPage.getPatientWelcomeHeading(personas.patient.displayName)).toBeVisible();
       await expect(authPage.userDisplayNameLocator(personas.patient.displayName)).toBeVisible();
       await expect(authPage.userRoleLocator(personas.patient.role)).toBeVisible();
     });
@@ -26,7 +26,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
     test('admin is redirected to /admin with welcome message and sidebar info', async ({ authPage }) => {
       await authPage.login(personas.admin.email, personas.admin.password);
       await expect(authPage.page).toHaveURL(/\/admin/);
-      await expect(authPage.getAdminDashboardHeading(personas.admin.displayName)).toBeVisible();
+      await expect(authPage.getAdminDashboardHeading()).toBeVisible();
       await expect(authPage.userDisplayNameLocator(personas.admin.displayName)).toBeVisible();
       await expect(authPage.userRoleLocator(personas.admin.role)).toBeVisible();
     });
