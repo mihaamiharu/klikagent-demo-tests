@@ -1,5 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { personas } from '../../config/personas';
+import { Page, Locator } from '@playwright/test';
 
 export class AuthPage {
   readonly page: Page;
@@ -7,54 +6,31 @@ export class AuthPage {
   readonly passwordInput: Locator;
   readonly submitButton: Locator;
   readonly alertMessage: Locator;
+  readonly logoutButton: Locator;
+  readonly dashboardHeader: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.emailInput = page.getByLabel('Email');
     this.passwordInput = page.getByLabel('Password');
-    this.submitButton = page.getByRole('button', { name: 'Sign in' });
+    this.submitButton = page.getByRole('button', { name: /sign in|login|submit/i });
     this.alertMessage = page.getByRole('alert');
+    this.logoutButton = page.getByRole('button', { name: /logout|sign out/i });
+    this.dashboardHeader = page.locator('header');
+  }
+
+  async navigateToLogin(): Promise<void> {
+    await this.page.goto('/login');
   }
 
   async login(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.submitButton.click();
-  }
-
-  async loginAsAdmin(): Promise<void> {
-    await this.login(personas.admin.email, personas.admin.password);
-  }
-
-  async loginAsDoctor(): Promise<void> {
-    await this.login(personas.doctor.email, personas.doctor.password);
-  }
-
-  async loginAsPatient(): Promise<void> {
-    await this.login(personas.patient.email, personas.patient.password);
-  }
-
-  async expectValidationError(): Promise<void> {
-    await expect(this.alertMessage).toBeVisible();
-  }
-
-  async expectInvalidCredentialsError(): Promise<void> {
-    await expect(this.alertMessage).toContainText('Invalid');
+    await this.page.waitForLoadState('networkidle');
   }
 
   async logout(): Promise<void> {
-    await this.page.getByRole('button', { name: /logout|sign out/i }).click();
-  }
-
-  async expectOnLoginPage(): Promise<void> {
-    await expect(this.page).toHaveURL(/login/);
-  }
-
-  async expectOnDashboard(): Promise<void> {
-    await expect(this.page).toHaveURL(/dashboard|admin|doctor|patient/);
-  }
-
-  async expectUserInfo(email: string, displayName: string): Promise<void> {
-    await expect(this.page.getByText(displayName)).toBeVisible();
+    await this.logoutButton.click();
   }
 }
