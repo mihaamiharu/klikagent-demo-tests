@@ -31,7 +31,7 @@ export class AuthPage {
     this.signUpLink = page.getByRole('link', { name: 'Sign up' });
 
     // Shared dashboard locators
-    this.welcomeHeading = page.getByRole('heading');
+    this.welcomeHeading = page.getByRole('heading', { level: 1 });
     this.userDisplayName = page.getByRole('complementary').getByText(/.*/);
     this.logoutButton = page.getByRole('button', { name: 'Log out' });
     this.dashboardLink = page.getByRole('link', { name: 'Dashboard' });
