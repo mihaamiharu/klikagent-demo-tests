@@ -87,7 +87,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
   });
 
   test.describe('Logout', { tag: '@smoke' }, () => {
-    test('user logs out and is redirected to /login', async ({ page }) => {
+    test('patient logs out and is redirected to /login', async ({ page }) => {
       const authPage = new AuthPage(page);
       await authPage.gotoLogin();
       await authPage.login(personas.patient.email, personas.patient.password);
@@ -95,7 +95,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await authPage.logout();
     });
 
-    test('user logs out and is redirected to /login', async ({ page }) => {
+    test('admin logs out and is redirected to /login', async ({ page }) => {
       const authPage = new AuthPage(page);
       await authPage.gotoLogin();
       await authPage.login(personas.admin.email, personas.admin.password);
@@ -103,7 +103,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await authPage.logout();
     });
 
-    test('user logs out and is redirected to /login', async ({ page }) => {
+    test('doctor logs out and is redirected to /login', async ({ page }) => {
       const authPage = new AuthPage(page);
       await authPage.gotoLogin();
       await authPage.login(personas.doctor.email, personas.doctor.password);
