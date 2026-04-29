@@ -14,7 +14,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await authPage.expectUrl(/\/dashboard/);
 
       // Welcome heading shows dynamic first name
-      await authPage.welcomeHeading(personas.patient.firstName).waitFor({ state: 'visible' });
+      await authPage.welcomeHeading(personas.patient.displayName).waitFor({ state: 'visible' });
 
       // Sidebar shows user's full name and role
       await expect(authPage.sidebar.getByText(personas.patient.displayName)).toBeVisible();
@@ -97,7 +97,7 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
   test.describe('Logout', { tag: '@smoke' }, () => {
     test('authenticated patient clicks logout and is redirected to login', async ({ authPage }) => {
       // Login first
-      await authPage.loginAs(personas.patient);
+      await authPage.login(personas.patient.email, personas.patient.password);
       await authPage.expectUrl(/\/dashboard/);
 
       // Click logout
@@ -120,11 +120,11 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
   });
 
   test.describe('Role-based redirect', { tag: '@smoke' }, () => {
-    test(`${personas.admin.role} is redirected to /${personas.admin.route} after login`, async ({ authPage }) => {
+    test('admin is redirected to /admin after login', async ({ authPage }) => {
       await authPage.login(personas.admin.email, personas.admin.password);
 
       // User is redirected to their role route
-      await authPage.expectUrl(new RegExp(`/${personas.admin.route}/`));
+      await authPage.expectUrl(/\/admin/);
 
       // Role-specific heading is visible
       await authPage.roleHeading(personas.admin.role).waitFor({ state: 'visible' });
@@ -134,11 +134,11 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await expect(authPage.sidebar.getByText(personas.admin.role)).toBeVisible();
     });
 
-    test(`${personas.doctor.role} is redirected to /${personas.doctor.route} after login`, async ({ authPage }) => {
+    test('doctor is redirected to /doctor after login', async ({ authPage }) => {
       await authPage.login(personas.doctor.email, personas.doctor.password);
 
       // User is redirected to their role route
-      await authPage.expectUrl(new RegExp(`/${personas.doctor.route}/`));
+      await authPage.expectUrl(/\/doctor/);
 
       // Role-specific heading is visible
       await authPage.roleHeading(personas.doctor.role).waitFor({ state: 'visible' });
@@ -148,11 +148,11 @@ test.describe('Auth | Login, validation, logout, and role-based redirect', { tag
       await expect(authPage.sidebar.getByText(personas.doctor.role)).toBeVisible();
     });
 
-    test(`${personas.patient.role} is redirected to /${personas.patient.route} after login`, async ({ authPage }) => {
+    test('patient is redirected to /dashboard after login', async ({ authPage }) => {
       await authPage.login(personas.patient.email, personas.patient.password);
 
       // User is redirected to their role route
-      await authPage.expectUrl(new RegExp(`/${personas.patient.route}/`));
+      await authPage.expectUrl(/\/dashboard/);
 
       // Role-specific heading is visible
       await authPage.roleHeading(personas.patient.role).waitFor({ state: 'visible' });
