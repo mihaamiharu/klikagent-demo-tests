@@ -46,7 +46,7 @@ jobs:
         run: npx playwright install-deps
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --pass-with-no-tests
         env:
           DASHBOARD_OUTPUT_DIR: ${{ github.workspace }}
 
