@@ -1,4 +1,5 @@
 import { AuthPage } from '../pages/auth/AuthPage';
+import { DashboardPage } from '../pages/book-appointment/DashboardPage';
 import { test as base } from '@playwright/test';
 
 // POMs are added here as KlikAgent generates and reviews them.
@@ -6,11 +7,15 @@ import { test as base } from '@playwright/test';
 
 type Fixtures = {
   authPage: AuthPage;
+  dashboardPage: DashboardPage;
 };
 
 export const test = base.extend<Fixtures>({
   authPage: async ({ page }, use) => {
     await use(new AuthPage(page));
+  },
+  dashboardPage: async ({ page }, use) => {
+    await use(new DashboardPage(page));
   },
 });
 
