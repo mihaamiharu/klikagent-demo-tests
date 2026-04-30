@@ -2,7 +2,7 @@
 
 Playwright test output repository for [KlikAgent](https://github.com/mihaamiharu/klikagent). This is the **target repo** — KlikAgent writes generated specs and Page Object Models here via GitHub branches and draft PRs.
 
-Also hosts the CI runner, GitHub Actions trigger workflow, and a live test results dashboard on GitHub Pages.
+Also hosts the CI runner and GitHub Actions trigger workflow.
 
 ---
 
@@ -18,8 +18,6 @@ klikagent-demo-tests
   │
   └── playwright.yml runs on PR
         ├── Runs generated tests against https://app.testingwithekki.com
-        ├── Updates dashboard-data.json
-        ├── Deploys GitHub Pages dashboard
         └── Reports results back to KlikAgent → POST /tasks/:id/results
 ```
 
@@ -33,8 +31,7 @@ Target app: **CareSync** — a healthcare management platform with Admin, Doctor
 .github/
 ├── workflows/
 │   ├── klikagent-trigger.yml   # Issue labeled → POST /tasks to KlikAgent
-│   ├── playwright.yml          # PR → run tests → report results → deploy dashboard
-│   └── deploy-dashboard.yml    # Deploy GitHub Pages dashboard
+│   └── playwright.yml          # PR/push → run tests → report results
 └── ISSUE_TEMPLATE/
     └── qa-task.yml             # Structured issue template for QA tasks
 
@@ -61,18 +58,8 @@ tests/
     └── {feature}/
         └── {taskId}.spec.ts    # Generated Playwright specs
 
-reporters/
-└── dashboard.ts                # Custom Playwright reporter for dashboard integration
-
 utils/
-├── helpers.ts                  # Shared test utilities
-└── update-dashboard.js         # Aggregates test results into dashboard JSON
-
-docs/                           # GitHub Pages dashboard
-├── index.html
-├── styles.css
-├── script.js
-└── dashboard-data.json         # Live test run history (updated on each CI run)
+└── helpers.ts                  # Shared test utilities
 ```
 
 ---
@@ -109,26 +96,15 @@ The template automatically applies the `klikagent` label, which triggers the `kl
 
 ### playwright.yml
 
-**Trigger:** Pull request targeting `main`
+**Trigger:** Pull request targeting `main`, push to `main`, or manual dispatch
 
 **What it does:**
-1. Installs dependencies and Playwright browsers
-2. Runs `npx playwright test` against the target app
-3. Runs `node utils/update-dashboard.js` to aggregate results
-4. Uploads test report and dashboard data as artifacts
-5. Reports results to KlikAgent: `POST /tasks/{taskId}/results`
-6. Triggers `deploy-dashboard.yml`
+1. **Smoke tests** — runs `@smoke` tagged tests on every PR (fast feedback)
+2. **E2E tests** — runs full suite sharded across 4 workers on push to main
+3. Uploads Playwright HTML reports as CI artifacts (viewable from Actions tab)
+4. Reports results to KlikAgent: `POST /tasks/{taskId}/results`
 
 **Required secrets:** `KLIKAGENT_URL`, `KLIKAGENT_TASK_ID` (set from PR branch name)
-
-### deploy-dashboard.yml
-
-**Trigger:** `workflow_run` on completion of Playwright Tests, or `workflow_dispatch`
-
-**What it does:**
-1. Downloads `dashboard-data` artifact from the Playwright run
-2. Commits updated `docs/dashboard-data.json` to `main`
-3. Deploys `docs/` to GitHub Pages
 
 ---
 

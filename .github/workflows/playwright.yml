@@ -2,12 +2,37 @@ name: Playwright Tests
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test:
+  detect-changes:
+    name: Detect Changed Tests
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    outputs:
+      test_files: ${{ steps.filter.outputs.test_files }}
+      has_test_changes: ${{ steps.filter.outputs.has_test_changes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            test_files:
+              - 'tests/web/**/*.spec.ts'
+            has_test_changes:
+              - 'tests/web/**/*.spec.ts'
+
+  smoke-tests:
+    name: Smoke Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -15,17 +40,6 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-
-      - name: Download existing dashboard data
-        run: |
-          if gh api repos/${{ github.repository }}/contents/docs/dashboard-data.json --ref main -q '.content' 2>/dev/null | base64 -d > docs/dashboard-data.json 2>/dev/null; then
-            echo "Downloaded existing dashboard data"
-          else
-            echo '{"lastUpdated": null, "runs": []}' > docs/dashboard-data.json
-            echo "Initialized new dashboard data"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: npm ci
 
@@ -45,31 +59,202 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
 
-      - name: Run Playwright tests
-        run: npx playwright test --pass-with-no-tests
+      - name: Run smoke tests
+        run: npx playwright test --grep @smoke --pass-with-no-tests
         env:
-          DASHBOARD_OUTPUT_DIR: ${{ github.workspace }}
+          CI: true
 
-      - name: Update dashboard data
-        run: node utils/update-dashboard.js
-
-      - uses: actions/upload-artifact@v4
+      - name: Upload Playwright report
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            run-result.json
+          name: smoke-report-${{ github.run_id }}
+          path: playwright-report/
           retention-days: 14
 
-      - uses: actions/upload-artifact@v4
-        if: always()
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          name: dashboard-data
+          name: smoke-failures-${{ github.run_id }}
           path: |
-            docs/
             test-results/
-          retention-days: 30
+            blob-report/
+          retention-days: 7
+
+      - name: Report failure to PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            await github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Smoke tests failed**\n\nView the [full report](${runUrl}) or download the \`smoke-report\` artifact to inspect failures locally.`,
+            });
+
+  pr-tests:
+    name: Run Changed Tests
+    needs: [detect-changes, smoke-tests]
+    if: github.event_name == 'pull_request' && needs.detect-changes.outputs.has_test_changes == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: Install Playwright system dependencies only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      - name: Get changed test files
+        id: changed-files
+        run: |
+          FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only | grep 'tests/web/.*\.spec\.ts$' || true)
+          if [ -n "$FILES" ]; then
+            echo "Running tests for changed files:"
+            echo "$FILES"
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$FILES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "No test files changed"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run changed tests
+        if: steps.changed-files.outputs.files != ''
+        run: |
+          echo "${{ steps.changed-files.outputs.files }}" | tr '\n' ' ' | xargs npx playwright test --pass-with-no-tests
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-failures-${{ github.run_id }}
+          path: |
+            test-results/
+            blob-report/
+          retention-days: 7
+
+      - name: Report failure to PR
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            await github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Generated tests failed**\n\nChanged test files did not pass. View the [full report](${runUrl}) or download the \`pr-report\` artifact.`,
+            });
+
+      - name: Report to KlikAgent
+        if: always()
+        run: |
+          TASK_ID=$(echo "${{ github.head_ref }}" | sed 's|qa/||' | cut -d'-' -f1)
+          PASSED=$([[ "${{ job.status }}" == "success" ]] && echo "true" || echo "false")
+          curl -X POST "${{ secrets.KLIKAGENT_URL }}/tasks/${TASK_ID}/results" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"taskId\": \"${TASK_ID}\",
+              \"passed\": ${PASSED},
+              \"summary\": \"PR test run ${{ job.status }} for ${{ github.head_ref }}\",
+              \"reportUrl\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+            }"
+        env:
+          KLIKAGENT_URL: ${{ secrets.KLIKAGENT_URL }}
+
+  e2e-tests:
+    name: E2E Tests
+    needs: smoke-tests
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: Install Playwright system dependencies only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      - name: Run E2E tests (shard ${{ matrix.shard }}/4)
+        run: npx playwright test --shard=${{ matrix.shard }}/4 --pass-with-no-tests
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-failures-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: |
+            test-results/
+            blob-report/
+          retention-days: 7
 
       - name: Report to KlikAgent
         if: always()
@@ -82,7 +267,7 @@ jobs:
               \"taskId\": \"${TASK_ID}\",
               \"passed\": ${PASSED},
               \"summary\": \"Playwright run ${{ job.status }} on ${{ github.ref_name }}\",
-              \"reportUrl\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              \"reportUrl\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
             }"
         env:
           KLIKAGENT_URL: ${{ secrets.KLIKAGENT_URL }}

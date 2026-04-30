@@ -14,6 +14,6 @@ export default defineConfig({
   reporter: [
     ['html', { open: 'never' }],
     ['json', { outputFile: 'test-results.json' }],
-    ['./reporters/dashboard.ts'],
+    ['list'],
   ],
 });
