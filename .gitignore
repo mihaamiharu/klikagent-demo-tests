@@ -6,3 +6,4 @@ playwright-report/
 dist/
 build/
 .DS_Store
+.playwright-auth/
