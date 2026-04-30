@@ -1,6 +1,5 @@
 import { test as base, Page } from '@playwright/test';
 import { AuthPage } from '../pages/auth/AuthPage';
-import { BookAppointmentPage } from '../pages/book-appointment/BookAppointmentPage';
 
 // POMs are added here as KlikAgent generates and reviews them.
 // After each PR is merged, import the new POM and register it below.
@@ -10,14 +9,11 @@ type Fixtures = {
   authPage: AuthPage;
 
   // Persona fixtures — provide a pre-authenticated Page via storageState.
-  // Use these in feature tests instead of beforeEach login:
-  //   test('...', async ({ asPatient }) => { await asPatient.goto('/dashboard'); ... })
+  // global-setup.ts logs in once per persona and saves .playwright-auth/{persona}.json.
+  // Use in feature tests: test('...', async ({ asPatient }) => { await asPatient.goto('/dashboard'); ... })
   asPatient: Page;
   asDoctor: Page;
   asAdmin: Page;
-
-  // Book Appointment page — use for Book Appointment feature tests
-  bookAppointmentPage: BookAppointmentPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -44,10 +40,6 @@ export const test = base.extend<Fixtures>({
     const page = await ctx.newPage();
     await use(page);
     await ctx.close();
-  },
-
-  bookAppointmentPage: async ({ page }, use) => {
-    await use(new BookAppointmentPage(page));
   },
 });
 

@@ -45,4 +45,12 @@ export class BookAppointmentPage {
   async expectBookNowCTAPointsToBooking(): Promise<void> {
     await expect(this.dashboardBookNowCTA).toHaveAttribute('href', /appointments\/book/);
   }
+
+  async getSidebarLinkHref(): Promise<string | null> {
+    return this.sidebarBookAppointmentLink.getAttribute('href');
+  }
+
+  async getCTAHref(): Promise<string | null> {
+    return this.dashboardBookNowCTA.getAttribute('href');
+  }
 }
