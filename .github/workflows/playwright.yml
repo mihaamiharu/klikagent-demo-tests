@@ -74,7 +74,7 @@ jobs:
       - name: Report to KlikAgent
         if: always()
         run: |
-          TASK_ID=$(echo "${{ github.ref_name }}" | sed 's|qa/||' | cut -d'-' -f1)
+          TASK_ID=$(echo "${{ github.head_ref }}" | sed 's|qa/||' | cut -d'-' -f1)
           PASSED=$([[ "${{ job.status }}" == "success" ]] && echo "true" || echo "false")
           curl -X POST "${{ secrets.KLIKAGENT_URL }}/tasks/${TASK_ID}/results" \
             -H "Content-Type: application/json" \
