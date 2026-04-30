@@ -23,7 +23,9 @@ export default async function globalSetup(config: FullConfig) {
     await page.getByTestId('email-input').fill(persona.email);
     await page.getByTestId('password-input').fill(persona.password);
     await page.getByTestId('login-submit').click();
-    await page.waitForURL(/\/dashboard/);
+    // Wait for any post-login URL — different personas land on different pages
+    // (e.g. admin → /admin, patient/doctor → /dashboard)
+    await page.waitForURL(url => !url.pathname.startsWith('/login'));
 
     const stateFile = path.join(authDir, `${name}.json`);
     await context.storageState({ path: stateFile });
