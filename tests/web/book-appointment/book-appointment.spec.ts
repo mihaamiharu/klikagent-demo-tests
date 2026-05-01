@@ -21,8 +21,8 @@ test.describe('Book Appointment | Dashboard Visibility', { tag: ['@book-appointm
     expect(href).toContain('/appointments/book');
   });
 
-  test(`BA-2: Redirect from /appointments/book to /${personas.admin.role.toLowerCase()}`, async ({ asAdmin }) => {
+  test(`BA-2: Redirect from /appointments/book to /admin`, async ({ asAdmin }) => {
     await asAdmin.goto('/appointments/book');
-    await expect(asAdmin).toHaveURL(/\/${personas.admin.role.toLowerCase()}/);
+    await expect(asAdmin).toHaveURL('/admin');
   });
 });
