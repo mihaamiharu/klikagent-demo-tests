@@ -24,7 +24,7 @@ test.describe('Dashboard | Access Control', { tag: ['@dashboard', '@regression']
     await asAdmin.goto('/appointments/book');
     
     // User should be redirected to their role-based route
-    await expect(asAdmin).toHaveURL(`/${personas.admin.role}/`);
+    await expect(asAdmin).toHaveURL(`/${personas.admin.role}`);
     
     // Verify dashboard heading is visible (dynamic from personas)
     await expect(asAdmin.getByRole('heading', { name: new RegExp(personas.admin.role, 'i') })).toBeVisible();
