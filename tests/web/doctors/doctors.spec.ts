@@ -28,23 +28,30 @@ test.describe('Doctors | Access Control', { tag: ['@doctors', '@regression'] }, 
 
 test.describe('Doctors | Admin CRUD', { tag: ['@doctors', '@regression'] }, () => {
   test('admin can create a new doctor', async ({ asAdmin }) => {
+    // Generate unique identifiers to avoid conflicts with existing data
+    const uniqueId = Date.now();
+    const doctorFirstName = `John${uniqueId}`;
+    const doctorLastName = `Test${uniqueId}`;
+    const doctorEmail = `john.test.${uniqueId}@example.com`;
+    const licenseNumber = `LIC-${uniqueId}`;
+
     await asAdmin.goto('/doctors');
     const doctorsPage = new DoctorsPage(asAdmin);
     await doctorsPage.expectPageVisible();
     await doctorsPage.clickCreateDoctor();
     await doctorsPage.expectModalVisible();
     await doctorsPage.fillDoctorForm({
-      firstName: 'John',
-      lastName: 'Test',
-      email: 'john.test@example.com',
+      firstName: doctorFirstName,
+      lastName: doctorLastName,
+      email: doctorEmail,
       password: 'Password123!',
       department: 'Cardiology',
-      licenseNumber: 'LIC-999999',
+      licenseNumber: licenseNumber,
       specialization: 'Test Specialist',
     });
     await doctorsPage.submitForm();
     await doctorsPage.expectModalHidden();
     await doctorsPage.expectSuccessNotificationVisible();
-    await doctorsPage.expectDoctorInList('Dr. John Test');
+    await doctorsPage.expectDoctorInList(`Dr. ${doctorFirstName} ${doctorLastName}`);
   });
 });
