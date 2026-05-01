@@ -48,7 +48,7 @@ test.describe('Book Appointment | Access Control', { tag: ['@book-appointment', 
   test(`BA-2: ${personas.admin.role} role is redirected away from /appointments/book`, async ({ asAdmin }) => {
     await asAdmin.goto('/appointments/book');
     const dashboardPage = new DashboardPage(asAdmin);
-    const adminDashboardPattern = new RegExp(`/${personas.admin.role}/dashboard/`);
+    const adminDashboardPattern = new RegExp(`/${personas.admin.role}$`);
     await dashboardPage.expectDashboardUrl(adminDashboardPattern);
   });
 
