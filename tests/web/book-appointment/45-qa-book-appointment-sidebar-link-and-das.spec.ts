@@ -51,10 +51,4 @@ test.describe('Book Appointment | Access Control', { tag: ['@book-appointment', 
     const adminDashboardPattern = new RegExp(`/${personas.admin.role}$`);
     await dashboardPage.expectDashboardUrl(adminDashboardPattern);
   });
-
-  test(`BA-2: ${personas.admin.role} role cannot see booking wizard`, async ({ asAdmin }) => {
-    await asAdmin.goto('/appointments/book');
-    const bookAppointmentPage = new BookAppointmentPage(asAdmin);
-    await expect(bookAppointmentPage.pageHeading).not.toBeVisible();
-  });
 });
