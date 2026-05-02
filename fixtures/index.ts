@@ -1,5 +1,6 @@
 import { test as base, Page } from '@playwright/test';
 import { AuthPage } from '../pages/auth/AuthPage';
+import { DepartmentsPage } from '../pages/departments/DepartmentsPage';
 
 // POMs are added here as KlikAgent generates and reviews them.
 // After each PR is merged, import the new POM and register it below.
@@ -7,6 +8,9 @@ import { AuthPage } from '../pages/auth/AuthPage';
 type Fixtures = {
   // Auth — use for login-page tests (form validation, error states, etc.)
   authPage: AuthPage;
+
+  // Feature POMs
+  departmentsPage: DepartmentsPage;
 
   // Persona fixtures — provide a pre-authenticated Page via storageState.
   // Use these in feature tests instead of beforeEach login:
@@ -19,6 +23,10 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   authPage: async ({ page }, use) => {
     await use(new AuthPage(page));
+  },
+
+  departmentsPage: async ({ asAdmin }, use) => {
+    await use(new DepartmentsPage(asAdmin));
   },
 
   asPatient: async ({ browser }, use) => {
