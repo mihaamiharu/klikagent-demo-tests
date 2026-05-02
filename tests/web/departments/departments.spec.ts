@@ -7,14 +7,14 @@ test.describe('Departments | Access Control', { tag: ['@departments', '@smoke'] 
     await expect(asPatient.getByTestId('create-department-button')).not.toBeVisible();
   });
 
-  test(`${personas.admin.displayName} sees Create Department button`, async ({ departmentsPage }) => {
+  test('admin sees Create Department button', async ({ departmentsPage }) => {
     await departmentsPage.goto();
     await departmentsPage.expectNewDepartmentButtonVisible();
   });
 });
 
 test.describe('Departments | Admin CRUD', { tag: ['@departments', '@regression'] }, () => {
-  test(`${personas.admin.displayName} can create a new department with validation`, async ({ departmentsPage }) => {
+  test('admin can create a new department with validation', async ({ departmentsPage }) => {
     await departmentsPage.goto();
     await departmentsPage.clickNewDepartmentButton();
     await departmentsPage.expectCreateModalVisible();
@@ -24,7 +24,7 @@ test.describe('Departments | Admin CRUD', { tag: ['@departments', '@regression']
     await departmentsPage.expectValidationErrorVisible();
   });
 
-  test(`${personas.admin.displayName} can create a new department successfully`, async ({ departmentsPage }) => {
+  test('admin can create a new department successfully', async ({ departmentsPage }) => {
     const uniqueDeptName = `QA Test Department ${Date.now()}`;
     await departmentsPage.goto();
     await departmentsPage.clickNewDepartmentButton();
@@ -44,12 +44,5 @@ test.describe('Departments | Admin CRUD', { tag: ['@departments', '@regression']
     await departmentsPage.expectModalClosed();
     await departmentsPage.searchForDepartment(tempDeptName);
     await departmentsPage.expectDepartmentNotInList(tempDeptName);
-  });
-
-  // SKIPPED: Edit button uses dynamic UUID pattern 'edit-department-{uuid}'
-  // which cannot be determined without API/database access to get the department UUID
-  test.skip(`${personas.admin.displayName} can edit an existing department`, async () => {
-    // SKIPPED: edit-department-{uuid} locator requires dynamic UUID that is only
-    // known after department creation via API response
   });
 });
