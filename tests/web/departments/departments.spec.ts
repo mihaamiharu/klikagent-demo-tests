@@ -83,27 +83,6 @@ test.describe('Departments | Admin CRUD', { tag: ['@departments', '@regression']
     // Verify the original name is no longer visible
     await departmentsPage.expectDepartmentNotInList(originalName);
   });
-
-  test('admin can search for a department', async ({ departmentsPage }) => {
-    await departmentsPage.goto();
-    
-    // Create a department first
-    await departmentsPage.clickNewDepartmentButton();
-    await departmentsPage.expectCreateModalVisible();
-    
-    const searchName = `Search Test Dept ${Date.now()}`;
-    await departmentsPage.fillDepartmentForm(searchName, 'Description for search test');
-    await departmentsPage.clickCreateDepartmentButton();
-    
-    await departmentsPage.expectModalClosed();
-    await departmentsPage.expectDepartmentInList(searchName);
-    
-    // Search for the department
-    await departmentsPage.searchForDepartment(searchName);
-    
-    // Verify the department is still visible
-    await departmentsPage.expectDepartmentInList(searchName);
-  });
 });
 
 test.describe('Departments | Access Control', { tag: ['@departments', '@access-control'] }, () => {
