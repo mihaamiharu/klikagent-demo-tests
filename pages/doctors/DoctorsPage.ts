@@ -1,16 +1,28 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+export interface DoctorFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  department: string;
+  license: string;
+  specialization: string;
+}
+
 export class DoctorsPage {
   readonly page: Page;
 
   // Page heading
   readonly pageHeading: Locator;
 
-  // Create Doctor button (admin only)
+  // Create Doctor button
   readonly createDoctorButton: Locator;
 
   // Create Doctor form modal
   readonly createDoctorForm: Locator;
+
+  // Form inputs
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly emailInput: Locator;
@@ -18,6 +30,9 @@ export class DoctorsPage {
   readonly departmentSelect: Locator;
   readonly licenseInput: Locator;
   readonly specializationInput: Locator;
+
+  // Form buttons
+  readonly cancelButton: Locator;
   readonly submitButton: Locator;
 
   constructor(page: Page) {
@@ -27,22 +42,38 @@ export class DoctorsPage {
     this.pageHeading = page.getByRole('heading', { name: 'Doctors' });
 
     // Create Doctor button
-    this.createDoctorButton = page.getByRole('button', { name: 'Create Doctor' });
+    this.createDoctorButton = page.getByTestId('doctor-create-button');
 
-    // Create Doctor form
-    this.createDoctorForm = page.getByRole('dialog', { name: /create doctor/i });
-    this.firstNameInput = page.getByLabel('First Name');
-    this.lastNameInput = page.getByLabel('Last Name');
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.departmentSelect = page.getByLabel('Department');
-    this.licenseInput = page.getByLabel('License Number');
-    this.specializationInput = page.getByLabel('Specialization');
-    this.submitButton = page.getByRole('button', { name: 'Submit' });
+    // Create Doctor form modal
+    this.createDoctorForm = page.getByTestId('doctor-form-modal');
+
+    // Form inputs using data-testid for resilience
+    this.firstNameInput = page.getByTestId('doctor-firstName-input');
+    this.lastNameInput = page.getByTestId('doctor-lastName-input');
+    this.emailInput = page.getByTestId('doctor-email-input');
+    this.passwordInput = page.getByTestId('doctor-password-input');
+    this.departmentSelect = page.getByTestId('doctor-department-input');
+    this.licenseInput = page.getByTestId('doctor-license-input');
+    this.specializationInput = page.getByTestId('doctor-specialization-input');
+
+    // Form buttons
+    this.cancelButton = page.getByTestId('doctor-form-cancel');
+    this.submitButton = page.getByTestId('doctor-form-submit');
   }
 
+  // Navigation
+  async gotoDoctors(): Promise<void> {
+    await this.page.goto('/doctors');
+  }
+
+  // Page assertions
   async expectPageHeadingVisible(): Promise<void> {
     await expect(this.pageHeading).toBeVisible();
+  }
+
+  // Create Doctor button actions
+  async clickCreateDoctorButton(): Promise<void> {
+    await this.createDoctorButton.click();
   }
 
   async expectCreateDoctorButtonVisible(): Promise<void> {
@@ -50,26 +81,20 @@ export class DoctorsPage {
   }
 
   async expectCreateDoctorButtonHidden(): Promise<void> {
-    await expect(this.createDoctorButton).not.toBeVisible();
+    await expect(this.createDoctorButton).toBeHidden();
   }
 
-  async clickCreateDoctorButton(): Promise<void> {
-    await this.createDoctorButton.click();
-  }
-
+  // Form modal
   async expectCreateDoctorFormVisible(): Promise<void> {
     await expect(this.createDoctorForm).toBeVisible();
   }
 
-  async fillDoctorForm(data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    department: string;
-    license: string;
-    specialization: string;
-  }): Promise<void> {
+  async expectFormClosed(): Promise<void> {
+    await expect(this.createDoctorForm).toBeHidden();
+  }
+
+  // Fill form
+  async fillDoctorForm(data: DoctorFormData): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.emailInput.fill(data.email);
@@ -79,15 +104,13 @@ export class DoctorsPage {
     await this.specializationInput.fill(data.specialization);
   }
 
+  // Submit form
   async submitDoctorForm(): Promise<void> {
     await this.submitButton.click();
   }
 
-  async expectFormClosed(): Promise<void> {
-    await expect(this.createDoctorForm).not.toBeVisible();
-  }
-
+  // Doctor list
   async expectDoctorInList(fullName: string): Promise<void> {
-    await expect(this.page.getByRole('link', { name: fullName })).toBeVisible();
+    await expect(this.page.getByText(fullName)).toBeVisible();
   }
 }
