@@ -9,7 +9,7 @@ type Fixtures = {
   // Auth — use for login-page tests (form validation, error states, etc.)
   authPage: AuthPage;
 
-  // Feature POMs — pre-authenticated via persona fixtures
+  // Department management page
   departmentsPage: DepartmentsPage;
 
   // Persona fixtures — provide a pre-authenticated Page via storageState.
@@ -25,8 +25,8 @@ export const test = base.extend<Fixtures>({
     await use(new AuthPage(page));
   },
 
-  departmentsPage: async ({ asAdmin }, use) => {
-    await use(new DepartmentsPage(asAdmin));
+  departmentsPage: async ({ page }, use) => {
+    await use(new DepartmentsPage(page));
   },
 
   asPatient: async ({ browser }, use) => {
