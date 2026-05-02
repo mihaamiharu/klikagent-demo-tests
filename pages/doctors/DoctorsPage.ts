@@ -3,54 +3,42 @@ import { Page, Locator, expect } from '@playwright/test';
 export class DoctorsPage {
   readonly page: Page;
 
-  // Page elements
+  // Page heading
   readonly pageHeading: Locator;
-  readonly createDoctorButton: Locator;
-  readonly searchInput: Locator;
-  readonly doctorLink: Locator;
-  readonly logoutButton: Locator;
 
-  // Form elements
-  readonly formHeading: Locator;
+  // Create Doctor button (admin only)
+  readonly createDoctorButton: Locator;
+
+  // Create Doctor form modal
+  readonly createDoctorForm: Locator;
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
-  readonly phoneInput: Locator;
-  readonly departmentInput: Locator;
+  readonly departmentSelect: Locator;
   readonly licenseInput: Locator;
   readonly specializationInput: Locator;
-  readonly bioInput: Locator;
-  readonly cancelButton: Locator;
-  readonly createButton: Locator;
+  readonly submitButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
-    // Page elements
+    // Page heading
     this.pageHeading = page.getByRole('heading', { name: 'Doctors' });
-    this.createDoctorButton = page.getByTestId('create-doctor-button');
-    this.searchInput = page.getByTestId('doctors-search');
-    this.doctorLink = page.locator('link').filter({ hasText: /^Dr\..*/ }).first();
-    this.logoutButton = page.getByRole('button', { name: 'Log out' });
 
-    // Form elements
-    this.formHeading = page.getByRole('heading', { name: 'Create Doctor' });
-    this.firstNameInput = page.getByTestId('doctor-firstName-input');
-    this.lastNameInput = page.getByTestId('doctor-lastName-input');
-    this.emailInput = page.getByTestId('doctor-email-input');
-    this.passwordInput = page.getByTestId('doctor-password-input');
-    this.phoneInput = page.getByTestId('doctor-phone-input');
-    this.departmentInput = page.getByTestId('doctor-department-input');
-    this.licenseInput = page.getByTestId('doctor-license-input');
-    this.specializationInput = page.getByTestId('doctor-specialization-input');
-    this.bioInput = page.getByTestId('doctor-bio-input');
-    this.cancelButton = page.getByTestId('doctor-form-cancel');
-    this.createButton = page.getByTestId('doctor-form-submit');
-  }
+    // Create Doctor button
+    this.createDoctorButton = page.getByRole('button', { name: 'Create Doctor' });
 
-  async gotoDoctors(): Promise<void> {
-    await this.page.goto('/doctors');
+    // Create Doctor form
+    this.createDoctorForm = page.getByRole('dialog', { name: /create doctor/i });
+    this.firstNameInput = page.getByLabel('First Name');
+    this.lastNameInput = page.getByLabel('Last Name');
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.departmentSelect = page.getByLabel('Department');
+    this.licenseInput = page.getByLabel('License Number');
+    this.specializationInput = page.getByLabel('Specialization');
+    this.submitButton = page.getByRole('button', { name: 'Submit' });
   }
 
   async expectPageHeadingVisible(): Promise<void> {
@@ -70,7 +58,7 @@ export class DoctorsPage {
   }
 
   async expectCreateDoctorFormVisible(): Promise<void> {
-    await expect(this.formHeading).toBeVisible();
+    await expect(this.createDoctorForm).toBeVisible();
   }
 
   async fillDoctorForm(data: {
@@ -81,41 +69,25 @@ export class DoctorsPage {
     department: string;
     license: string;
     specialization: string;
-    phone?: string;
-    bio?: string;
   }): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.emailInput.fill(data.email);
     await this.passwordInput.fill(data.password);
-    await this.departmentInput.selectOption(data.department);
+    await this.departmentSelect.selectOption(data.department);
     await this.licenseInput.fill(data.license);
     await this.specializationInput.fill(data.specialization);
-
-    if (data.phone) {
-      await this.phoneInput.fill(data.phone);
-    }
-    if (data.bio) {
-      await this.bioInput.fill(data.bio);
-    }
   }
 
   async submitDoctorForm(): Promise<void> {
-    await this.createButton.click();
+    await this.submitButton.click();
   }
 
   async expectFormClosed(): Promise<void> {
-    await expect(this.formHeading).not.toBeVisible();
+    await expect(this.createDoctorForm).not.toBeVisible();
   }
 
   async expectDoctorInList(fullName: string): Promise<void> {
-    // The doctor appears in the list with "Dr. FirstName LastName" format
-    const doctorNamePattern = new RegExp(`Dr\.\s${fullName}`);
-    await expect(this.page.locator('link').filter({ hasText: doctorNamePattern }).first()).toBeVisible();
-  }
-
-  async expectDoctorWithLicense(licenseNumber: string): Promise<void> {
-    // Check if a doctor with the given license number is visible in the list
-    await expect(this.page.getByText(licenseNumber)).toBeVisible();
+    await expect(this.page.getByRole('link', { name: fullName })).toBeVisible();
   }
 }
