@@ -35,22 +35,4 @@ test.describe('Doctors Flow', { tag: ['@doctors', '@regression'] }, () => {
 
     await doctorsPage.expectValidationErrorsVisible();
   });
-
-  test.skip('sees email validation error when email field is empty', async ({ doctorsPage }) => {
-    // SKIPPED: email and password validation errors were not visible in the initial snapshot during exploration
-    // These errors may require scrolling or additional interaction to display
-    await doctorsPage.goto();
-    await doctorsPage.clickCreateDoctorButton();
-    await doctorsPage.submitDoctorForm();
-    await doctorsPage.expectEmailRequiredError();
-  });
-
-  test.skip('sees password validation error when password field is empty', async ({ doctorsPage }) => {
-    // SKIPPED: email and password validation errors were not visible in the initial snapshot during exploration
-    // These errors may require scrolling or additional interaction to display
-    await doctorsPage.goto();
-    await doctorsPage.clickCreateDoctorButton();
-    await doctorsPage.submitDoctorForm();
-    await doctorsPage.expectPasswordRequiredError();
-  });
 });
